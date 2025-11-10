@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
+import { BattleEffects } from "@/components/BattleEffects";
 import grannyFighter from "@/assets/granny-fighter.png";
 import santaFighter from "@/assets/santa-fighter.png";
 
@@ -15,6 +16,10 @@ const BattleArena = () => {
   const [santaPunching, setSantaPunching] = useState(false);
   const [grannyShaking, setGrannyShaking] = useState(false);
   const [santaShaking, setSantaShaking] = useState(false);
+  const [showGrannyHit, setShowGrannyHit] = useState(false);
+  const [showSantaHit, setShowSantaHit] = useState(false);
+  const [lastGrannyDamage, setLastGrannyDamage] = useState(0);
+  const [lastSantaDamage, setLastSantaDamage] = useState(0);
 
   const startBattle = () => {
     setIsBattling(true);
@@ -28,41 +33,57 @@ const BattleArena = () => {
       const damage = Math.floor(Math.random() * 15) + 10;
 
       if (attacker === "granny") {
+        // Granny attacks
         setGrannyPunching(true);
         setTimeout(() => {
           setGrannyPunching(false);
           setSantaShaking(true);
-          setTimeout(() => setSantaShaking(false), 500);
-        }, 250);
+          setShowSantaHit(true);
+          setLastSantaDamage(damage);
+          setTimeout(() => {
+            setSantaShaking(false);
+            setShowSantaHit(false);
+          }, 600);
+        }, 300);
         
         setSantaHealth((prev) => {
           const newHealth = Math.max(0, prev - damage);
           if (newHealth === 0) {
             clearInterval(battleInterval);
-            setWinner("granny");
-            setIsBattling(false);
+            setTimeout(() => {
+              setWinner("granny");
+              setIsBattling(false);
+            }, 800);
           }
           return newHealth;
         });
       } else {
+        // Santa attacks
         setSantaPunching(true);
         setTimeout(() => {
           setSantaPunching(false);
           setGrannyShaking(true);
-          setTimeout(() => setGrannyShaking(false), 500);
-        }, 250);
+          setShowGrannyHit(true);
+          setLastGrannyDamage(damage);
+          setTimeout(() => {
+            setGrannyShaking(false);
+            setShowGrannyHit(false);
+          }, 600);
+        }, 300);
         
         setGrannyHealth((prev) => {
           const newHealth = Math.max(0, prev - damage);
           if (newHealth === 0) {
             clearInterval(battleInterval);
-            setWinner("santa");
-            setIsBattling(false);
+            setTimeout(() => {
+              setWinner("santa");
+              setIsBattling(false);
+            }, 800);
           }
           return newHealth;
         });
       }
-    }, 1000);
+    }, 1200);
   };
 
   const resetBattle = () => {
@@ -86,20 +107,35 @@ const BattleArena = () => {
         </div>
 
         {/* Battle Arena */}
-        <div className="relative bg-card/50 backdrop-blur-sm rounded-3xl border-4 border-border p-8 mb-6 shadow-2xl">
+        <div className="relative bg-card/50 backdrop-blur-sm rounded-3xl border-4 border-border p-8 mb-6 shadow-2xl overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-r from-granny/10 via-transparent to-santa/10 rounded-3xl" />
+          
+          {/* Battle Effects Overlay */}
+          <BattleEffects
+            showGrannyHit={showGrannyHit}
+            showSantaHit={showSantaHit}
+            lastGrannyDamage={lastGrannyDamage}
+            lastSantaDamage={lastSantaDamage}
+          />
           
           <div className="relative grid grid-cols-2 gap-8 mb-8">
             {/* Granny */}
             <div className="space-y-4">
-              <div className={`relative ${grannyPunching ? 'animate-punch-right' : ''} ${grannyShaking ? 'animate-shake' : ''} ${winner === 'granny' ? 'animate-victory' : ''}`}>
-                <div className="aspect-square rounded-2xl overflow-hidden border-4 border-granny shadow-lg shadow-granny/50">
+              <div className={`relative transition-all duration-300 ${grannyPunching ? 'animate-punch-right' : ''} ${grannyShaking ? 'animate-shake' : ''} ${winner === 'granny' ? 'animate-victory' : ''}`}>
+                <div className="aspect-square rounded-2xl overflow-hidden border-4 border-granny shadow-lg shadow-granny/50 transition-shadow duration-300">
                   <img
                     src={grannyFighter}
                     alt="Fighting Granny"
-                    className="w-full h-full object-cover"
+                    className={`w-full h-full object-cover transition-all duration-300 ${grannyShaking ? 'brightness-150 contrast-125' : ''}`}
                   />
                 </div>
+                
+                {/* Attack indicator */}
+                {grannyPunching && (
+                  <div className="absolute -right-8 top-1/2 -translate-y-1/2 animate-float-up">
+                    <div className="text-4xl">👊</div>
+                  </div>
+                )}
                 {winner === "granny" && (
                   <div className="absolute inset-0 flex items-center justify-center">
                     <div className="text-6xl font-black text-granny drop-shadow-[0_0_20px_rgba(255,105,180,0.8)] animate-pulse">
@@ -126,14 +162,21 @@ const BattleArena = () => {
 
             {/* Santa */}
             <div className="space-y-4">
-              <div className={`relative ${santaPunching ? 'animate-punch-left' : ''} ${santaShaking ? 'animate-shake' : ''} ${winner === 'santa' ? 'animate-victory' : ''}`}>
-                <div className="aspect-square rounded-2xl overflow-hidden border-4 border-santa shadow-lg shadow-santa/50">
+              <div className={`relative transition-all duration-300 ${santaPunching ? 'animate-punch-left' : ''} ${santaShaking ? 'animate-shake' : ''} ${winner === 'santa' ? 'animate-victory' : ''}`}>
+                <div className="aspect-square rounded-2xl overflow-hidden border-4 border-santa shadow-lg shadow-santa/50 transition-shadow duration-300">
                   <img
                     src={santaFighter}
                     alt="Fighting Santa"
-                    className="w-full h-full object-cover"
+                    className={`w-full h-full object-cover transition-all duration-300 ${santaShaking ? 'brightness-150 contrast-125' : ''}`}
                   />
                 </div>
+                
+                {/* Attack indicator */}
+                {santaPunching && (
+                  <div className="absolute -left-8 top-1/2 -translate-y-1/2 animate-float-up">
+                    <div className="text-4xl">👊</div>
+                  </div>
+                )}
                 {winner === "santa" && (
                   <div className="absolute inset-0 flex items-center justify-center">
                     <div className="text-6xl font-black text-santa drop-shadow-[0_0_20px_rgba(220,38,38,0.8)] animate-pulse">
