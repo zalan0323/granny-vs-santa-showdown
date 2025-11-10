@@ -60,6 +60,7 @@ export default {
         granny: "hsl(var(--granny))",
         santa: "hsl(var(--santa))",
         "battle-glow": "hsl(var(--battle-glow))",
+        levente: "hsl(var(--accent))",
       },
       borderRadius: {
         lg: "var(--radius)",

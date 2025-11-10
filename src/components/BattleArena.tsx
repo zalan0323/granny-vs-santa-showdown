@@ -2,81 +2,84 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { BattleEffects } from "@/components/BattleEffects";
-import grannyFighter from "@/assets/granny-fighter.png";
-import santaFighter from "@/assets/santa-fighter.png";
+import { Fighter } from "@/types/fighter";
 
-type Fighter = "granny" | "santa";
+interface BattleArenaProps {
+  fighter1: Fighter;
+  fighter2: Fighter;
+  onBackToSelect: () => void;
+}
 
-const BattleArena = () => {
-  const [grannyHealth, setGrannyHealth] = useState(100);
-  const [santaHealth, setSantaHealth] = useState(100);
+const BattleArena = ({ fighter1, fighter2, onBackToSelect }: BattleArenaProps) => {
+  const [fighter1Health, setFighter1Health] = useState(100);
+  const [fighter2Health, setFighter2Health] = useState(100);
   const [isBattling, setIsBattling] = useState(false);
   const [winner, setWinner] = useState<Fighter | null>(null);
-  const [grannyPunching, setGrannyPunching] = useState(false);
-  const [santaPunching, setSantaPunching] = useState(false);
-  const [grannyShaking, setGrannyShaking] = useState(false);
-  const [santaShaking, setSantaShaking] = useState(false);
-  const [showGrannyHit, setShowGrannyHit] = useState(false);
-  const [showSantaHit, setShowSantaHit] = useState(false);
-  const [lastGrannyDamage, setLastGrannyDamage] = useState(0);
-  const [lastSantaDamage, setLastSantaDamage] = useState(0);
+  const [fighter1Punching, setFighter1Punching] = useState(false);
+  const [fighter2Punching, setFighter2Punching] = useState(false);
+  const [fighter1Shaking, setFighter1Shaking] = useState(false);
+  const [fighter2Shaking, setFighter2Shaking] = useState(false);
+  const [showFighter1Hit, setShowFighter1Hit] = useState(false);
+  const [showFighter2Hit, setShowFighter2Hit] = useState(false);
+  const [lastFighter1Damage, setLastFighter1Damage] = useState(0);
+  const [lastFighter2Damage, setLastFighter2Damage] = useState(0);
 
   const startBattle = () => {
     setIsBattling(true);
     setWinner(null);
-    setGrannyHealth(100);
-    setSantaHealth(100);
+    setFighter1Health(100);
+    setFighter2Health(100);
 
     // Simulate battle with random attacks
     const battleInterval = setInterval(() => {
-      const attacker = Math.random() > 0.5 ? "granny" : "santa";
+      const attacker = Math.random() > 0.5 ? 1 : 2;
       const damage = Math.floor(Math.random() * 15) + 10;
 
-      if (attacker === "granny") {
-        // Granny attacks
-        setGrannyPunching(true);
+      if (attacker === 1) {
+        // Fighter 1 attacks
+        setFighter1Punching(true);
         setTimeout(() => {
-          setGrannyPunching(false);
-          setSantaShaking(true);
-          setShowSantaHit(true);
-          setLastSantaDamage(damage);
+          setFighter1Punching(false);
+          setFighter2Shaking(true);
+          setShowFighter2Hit(true);
+          setLastFighter2Damage(damage);
           setTimeout(() => {
-            setSantaShaking(false);
-            setShowSantaHit(false);
+            setFighter2Shaking(false);
+            setShowFighter2Hit(false);
           }, 600);
         }, 300);
         
-        setSantaHealth((prev) => {
+        setFighter2Health((prev) => {
           const newHealth = Math.max(0, prev - damage);
           if (newHealth === 0) {
             clearInterval(battleInterval);
             setTimeout(() => {
-              setWinner("granny");
+              setWinner(fighter1);
               setIsBattling(false);
             }, 800);
           }
           return newHealth;
         });
       } else {
-        // Santa attacks
-        setSantaPunching(true);
+        // Fighter 2 attacks
+        setFighter2Punching(true);
         setTimeout(() => {
-          setSantaPunching(false);
-          setGrannyShaking(true);
-          setShowGrannyHit(true);
-          setLastGrannyDamage(damage);
+          setFighter2Punching(false);
+          setFighter1Shaking(true);
+          setShowFighter1Hit(true);
+          setLastFighter1Damage(damage);
           setTimeout(() => {
-            setGrannyShaking(false);
-            setShowGrannyHit(false);
+            setFighter1Shaking(false);
+            setShowFighter1Hit(false);
           }, 600);
         }, 300);
         
-        setGrannyHealth((prev) => {
+        setFighter1Health((prev) => {
           const newHealth = Math.max(0, prev - damage);
           if (newHealth === 0) {
             clearInterval(battleInterval);
             setTimeout(() => {
-              setWinner("santa");
+              setWinner(fighter2);
               setIsBattling(false);
             }, 800);
           }
@@ -87,8 +90,8 @@ const BattleArena = () => {
   };
 
   const resetBattle = () => {
-    setGrannyHealth(100);
-    setSantaHealth(100);
+    setFighter1Health(100);
+    setFighter2Health(100);
     setWinner(null);
     setIsBattling(false);
   };
@@ -99,7 +102,7 @@ const BattleArena = () => {
         {/* Title */}
         <div className="text-center mb-8 animate-fade-in">
           <h1 className="text-6xl font-black mb-2 bg-gradient-to-r from-granny via-accent to-santa bg-clip-text text-transparent">
-            GRANNY VS SANTA
+            {fighter1.name} VS {fighter2.name}
           </h1>
           <p className="text-2xl text-muted-foreground font-bold tracking-wider">
             ULTIMATE SHOWDOWN
@@ -112,33 +115,33 @@ const BattleArena = () => {
           
           {/* Battle Effects Overlay */}
           <BattleEffects
-            showGrannyHit={showGrannyHit}
-            showSantaHit={showSantaHit}
-            lastGrannyDamage={lastGrannyDamage}
-            lastSantaDamage={lastSantaDamage}
+            showGrannyHit={showFighter1Hit}
+            showSantaHit={showFighter2Hit}
+            lastGrannyDamage={lastFighter1Damage}
+            lastSantaDamage={lastFighter2Damage}
           />
           
           <div className="relative grid grid-cols-2 gap-8 mb-8">
-            {/* Granny */}
+            {/* Fighter 1 */}
             <div className="space-y-4">
-              <div className={`relative transition-all duration-300 ${grannyPunching ? 'animate-punch-right' : ''} ${grannyShaking ? 'animate-shake' : ''} ${winner === 'granny' ? 'animate-victory' : ''}`}>
-                <div className="aspect-square rounded-2xl overflow-hidden border-4 border-granny shadow-lg shadow-granny/50 transition-shadow duration-300">
+              <div className={`relative transition-all duration-300 ${fighter1Punching ? 'animate-punch-right' : ''} ${fighter1Shaking ? 'animate-shake' : ''} ${winner?.id === fighter1.id ? 'animate-victory' : ''}`}>
+                <div className={`aspect-square rounded-2xl overflow-hidden border-4 shadow-lg transition-shadow duration-300`} style={{ borderColor: `hsl(var(--${fighter1.color}))`, boxShadow: `0 10px 40px hsl(var(--${fighter1.color}) / 0.5)` }}>
                   <img
-                    src={grannyFighter}
-                    alt="Fighting Granny"
-                    className={`w-full h-full object-cover transition-all duration-300 ${grannyShaking ? 'brightness-150 contrast-125' : ''}`}
+                    src={fighter1.image}
+                    alt={fighter1.name}
+                    className={`w-full h-full object-cover transition-all duration-300 ${fighter1Shaking ? 'brightness-150 contrast-125' : ''}`}
                   />
                 </div>
                 
                 {/* Attack indicator */}
-                {grannyPunching && (
+                {fighter1Punching && (
                   <div className="absolute -right-8 top-1/2 -translate-y-1/2 animate-float-up">
                     <div className="text-4xl">👊</div>
                   </div>
                 )}
-                {winner === "granny" && (
+                {winner?.id === fighter1.id && (
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="text-6xl font-black text-granny drop-shadow-[0_0_20px_rgba(255,105,180,0.8)] animate-pulse">
+                    <div className="text-6xl font-black drop-shadow-[0_0_20px_rgba(251,191,36,0.8)] animate-pulse" style={{ color: `hsl(var(--${fighter1.color}))` }}>
                       WINNER!
                     </div>
                   </div>
@@ -146,10 +149,10 @@ const BattleArena = () => {
               </div>
               <div className="space-y-2">
                 <div className="flex justify-between items-center">
-                  <h3 className="text-3xl font-bold text-granny">GRANNY</h3>
-                  <span className="text-2xl font-bold text-foreground">{grannyHealth}%</span>
+                  <h3 className="text-3xl font-bold" style={{ color: `hsl(var(--${fighter1.color}))` }}>{fighter1.name}</h3>
+                  <span className="text-2xl font-bold text-foreground">{fighter1Health}%</span>
                 </div>
-                <Progress value={grannyHealth} className="h-4 bg-muted" />
+                <Progress value={fighter1Health} className="h-4 bg-muted" />
               </div>
             </div>
 
@@ -162,26 +165,26 @@ const BattleArena = () => {
               </div>
             )}
 
-            {/* Santa */}
+            {/* Fighter 2 */}
             <div className="space-y-4">
-              <div className={`relative transition-all duration-300 ${santaPunching ? 'animate-punch-left' : ''} ${santaShaking ? 'animate-shake' : ''} ${winner === 'santa' ? 'animate-victory' : ''}`}>
-                <div className="aspect-square rounded-2xl overflow-hidden border-4 border-santa shadow-lg shadow-santa/50 transition-shadow duration-300">
+              <div className={`relative transition-all duration-300 ${fighter2Punching ? 'animate-punch-left' : ''} ${fighter2Shaking ? 'animate-shake' : ''} ${winner?.id === fighter2.id ? 'animate-victory' : ''}`}>
+                <div className={`aspect-square rounded-2xl overflow-hidden border-4 shadow-lg transition-shadow duration-300`} style={{ borderColor: `hsl(var(--${fighter2.color}))`, boxShadow: `0 10px 40px hsl(var(--${fighter2.color}) / 0.5)` }}>
                   <img
-                    src={santaFighter}
-                    alt="Fighting Santa"
-                    className={`w-full h-full object-cover transition-all duration-300 ${santaShaking ? 'brightness-150 contrast-125' : ''}`}
+                    src={fighter2.image}
+                    alt={fighter2.name}
+                    className={`w-full h-full object-cover transition-all duration-300 ${fighter2Shaking ? 'brightness-150 contrast-125' : ''}`}
                   />
                 </div>
                 
                 {/* Attack indicator */}
-                {santaPunching && (
+                {fighter2Punching && (
                   <div className="absolute -left-8 top-1/2 -translate-y-1/2 animate-float-up">
                     <div className="text-4xl">👊</div>
                   </div>
                 )}
-                {winner === "santa" && (
+                {winner?.id === fighter2.id && (
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="text-6xl font-black text-santa drop-shadow-[0_0_20px_rgba(220,38,38,0.8)] animate-pulse">
+                    <div className="text-6xl font-black drop-shadow-[0_0_20px_rgba(251,191,36,0.8)] animate-pulse" style={{ color: `hsl(var(--${fighter2.color}))` }}>
                       WINNER!
                     </div>
                   </div>
@@ -189,10 +192,10 @@ const BattleArena = () => {
               </div>
               <div className="space-y-2">
                 <div className="flex justify-between items-center">
-                  <h3 className="text-3xl font-bold text-santa">SANTA</h3>
-                  <span className="text-2xl font-bold text-foreground">{santaHealth}%</span>
+                  <h3 className="text-3xl font-bold" style={{ color: `hsl(var(--${fighter2.color}))` }}>{fighter2.name}</h3>
+                  <span className="text-2xl font-bold text-foreground">{fighter2Health}%</span>
                 </div>
-                <Progress value={santaHealth} className="h-4 bg-muted" />
+                <Progress value={fighter2Health} className="h-4 bg-muted" />
               </div>
             </div>
           </div>
@@ -202,7 +205,7 @@ const BattleArena = () => {
             <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 flex items-center justify-center pointer-events-none">
               <div className="bg-background/95 backdrop-blur-md px-12 py-6 rounded-2xl border-4 border-accent shadow-2xl animate-fade-in">
                 <p className="text-5xl font-black bg-gradient-to-r from-granny to-santa bg-clip-text text-transparent">
-                  {winner === "granny" ? "GRANNY WINS!" : "SANTA WINS!"}
+                  {winner.name} WINS!
                 </p>
               </div>
             </div>
@@ -221,14 +224,24 @@ const BattleArena = () => {
             </Button>
           )}
           {(winner || isBattling) && (
-            <Button
-              onClick={resetBattle}
-              size="lg"
-              variant="outline"
-              className="text-2xl px-12 py-8 font-black border-2 hover:bg-accent hover:text-accent-foreground transition-all duration-300"
-            >
-              RESET
-            </Button>
+            <>
+              <Button
+                onClick={resetBattle}
+                size="lg"
+                variant="outline"
+                className="text-2xl px-12 py-8 font-black border-2 hover:bg-accent hover:text-accent-foreground transition-all duration-300"
+              >
+                REMATCH
+              </Button>
+              <Button
+                onClick={onBackToSelect}
+                size="lg"
+                variant="secondary"
+                className="text-2xl px-12 py-8 font-black transition-all duration-300"
+              >
+                CHANGE FIGHTERS
+              </Button>
+            </>
           )}
         </div>
 
