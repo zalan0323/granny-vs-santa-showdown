@@ -67,6 +67,7 @@ export default {
         thanos: "hsl(var(--thanos))",
         "tota-oliver": "hsl(var(--tota-oliver))",
         "jakab-istvan": "hsl(var(--jakab-istvan))",
+        "cseh-balazs": "hsl(var(--cseh-balazs))",
         "battle-glow": "hsl(var(--battle-glow))",
         levente: "hsl(var(--accent))",
       },

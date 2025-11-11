@@ -12,6 +12,7 @@ import fortniteFighter from "@/assets/fortnite-fighter.png";
 import thanosFighter from "@/assets/thanos-fighter.png";
 import totaOliverFighter from "@/assets/tota-oliver-fighter.png";
 import jakabIstvanFighter from "@/assets/jakab-istvan-fighter.png";
+import csehBalazsfighter from "@/assets/cseh-balazs-fighter.png";
 
 interface CharacterSelectProps {
   onStartBattle: (fighter1: Fighter, fighter2: Fighter) => void;
@@ -116,6 +117,15 @@ export const fighters: Fighter[] = [
     maxHealth: 115,
     strength: 17,
     attackSpeed: 1300,
+  },
+  {
+    id: "cseh-balazs",
+    name: "CSEH BALÁZS",
+    image: csehBalazsfighter,
+    color: "cseh-balazs",
+    maxHealth: 125,
+    strength: 19,
+    attackSpeed: 1500,
   },
 ];
 

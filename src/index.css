@@ -48,6 +48,7 @@ All colors MUST be HSL.
     --thanos: 270 60% 50%;
     --tota-oliver: 15 75% 55%;
     --jakab-istvan: 200 65% 45%;
+    --cseh-balazs: 180 70% 50%;
     --battle-glow: 0 0% 100%;
     
     --gradient-battle: linear-gradient(135deg, hsl(var(--primary) / 0.2), hsl(var(--secondary) / 0.2));
