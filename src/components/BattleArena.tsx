@@ -11,8 +11,8 @@ interface BattleArenaProps {
 }
 
 const BattleArena = ({ fighter1, fighter2, onBackToSelect }: BattleArenaProps) => {
-  const [fighter1Health, setFighter1Health] = useState(100);
-  const [fighter2Health, setFighter2Health] = useState(100);
+  const [fighter1Health, setFighter1Health] = useState(fighter1.maxHealth);
+  const [fighter2Health, setFighter2Health] = useState(fighter2.maxHealth);
   const [isBattling, setIsBattling] = useState(false);
   const [winner, setWinner] = useState<Fighter | null>(null);
   const [fighter1Punching, setFighter1Punching] = useState(false);
@@ -27,13 +27,14 @@ const BattleArena = ({ fighter1, fighter2, onBackToSelect }: BattleArenaProps) =
   const startBattle = () => {
     setIsBattling(true);
     setWinner(null);
-    setFighter1Health(100);
-    setFighter2Health(100);
+    setFighter1Health(fighter1.maxHealth);
+    setFighter2Health(fighter2.maxHealth);
 
     // Simulate battle with random attacks
     const battleInterval = setInterval(() => {
       const attacker = Math.random() > 0.5 ? 1 : 2;
-      const damage = Math.floor(Math.random() * 15) + 10;
+      const baseDamage = attacker === 1 ? fighter1.strength : fighter2.strength;
+      const damage = Math.floor(Math.random() * baseDamage * 0.5) + baseDamage;
 
       if (attacker === 1) {
         // Fighter 1 attacks
@@ -86,12 +87,12 @@ const BattleArena = ({ fighter1, fighter2, onBackToSelect }: BattleArenaProps) =
           return newHealth;
         });
       }
-    }, 1200);
+    }, Math.min(fighter1.attackSpeed, fighter2.attackSpeed));
   };
 
   const resetBattle = () => {
-    setFighter1Health(100);
-    setFighter2Health(100);
+    setFighter1Health(fighter1.maxHealth);
+    setFighter2Health(fighter2.maxHealth);
     setWinner(null);
     setIsBattling(false);
   };
@@ -150,9 +151,9 @@ const BattleArena = ({ fighter1, fighter2, onBackToSelect }: BattleArenaProps) =
               <div className="space-y-2">
                 <div className="flex justify-between items-center">
                   <h3 className="text-3xl font-bold" style={{ color: `hsl(var(--${fighter1.color}))` }}>{fighter1.name}</h3>
-                  <span className="text-2xl font-bold text-foreground">{fighter1Health}%</span>
+                  <span className="text-2xl font-bold text-foreground">{fighter1Health}/{fighter1.maxHealth}</span>
                 </div>
-                <Progress value={fighter1Health} className="h-4 bg-muted" />
+                <Progress value={(fighter1Health / fighter1.maxHealth) * 100} className="h-4 bg-muted" />
               </div>
             </div>
 
@@ -193,9 +194,9 @@ const BattleArena = ({ fighter1, fighter2, onBackToSelect }: BattleArenaProps) =
               <div className="space-y-2">
                 <div className="flex justify-between items-center">
                   <h3 className="text-3xl font-bold" style={{ color: `hsl(var(--${fighter2.color}))` }}>{fighter2.name}</h3>
-                  <span className="text-2xl font-bold text-foreground">{fighter2Health}%</span>
+                  <span className="text-2xl font-bold text-foreground">{fighter2Health}/{fighter2.maxHealth}</span>
                 </div>
-                <Progress value={fighter2Health} className="h-4 bg-muted" />
+                <Progress value={(fighter2Health / fighter2.maxHealth) * 100} className="h-4 bg-muted" />
               </div>
             </div>
           </div>

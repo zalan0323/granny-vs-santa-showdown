@@ -4,6 +4,14 @@ import { Fighter } from "@/types/fighter";
 import grannyFighter from "@/assets/granny-fighter.png";
 import santaFighter from "@/assets/santa-fighter.png";
 import leventeFighter from "@/assets/levente-fighter.png";
+import mucsyLaciFighter from "@/assets/mucsy-laci-fighter.png";
+import heizlerZalanFighter from "@/assets/heizler-zalan-fighter.png";
+import szaboAgostonFighter from "@/assets/szabo-agoston-fighter.png";
+import simaiBotondFighter from "@/assets/simai-botond-fighter.png";
+import fortniteFighter from "@/assets/fortnite-fighter.png";
+import thanosFighter from "@/assets/thanos-fighter.png";
+import totaOliverFighter from "@/assets/tota-oliver-fighter.png";
+import jakabIstvanFighter from "@/assets/jakab-istvan-fighter.png";
 
 interface CharacterSelectProps {
   onStartBattle: (fighter1: Fighter, fighter2: Fighter) => void;
@@ -15,18 +23,99 @@ export const fighters: Fighter[] = [
     name: "GRANNY",
     image: grannyFighter,
     color: "granny",
+    maxHealth: 100,
+    strength: 12,
+    attackSpeed: 1200,
   },
   {
     id: "santa",
     name: "SANTA",
     image: santaFighter,
     color: "santa",
+    maxHealth: 120,
+    strength: 15,
+    attackSpeed: 1400,
   },
   {
     id: "levente",
     name: "BORBÉLY LEVENTE",
     image: leventeFighter,
     color: "accent",
+    maxHealth: 110,
+    strength: 14,
+    attackSpeed: 1100,
+  },
+  {
+    id: "mucsy-laci",
+    name: "MUCSY LACI",
+    image: mucsyLaciFighter,
+    color: "mucsy-laci",
+    maxHealth: 95,
+    strength: 18,
+    attackSpeed: 900,
+  },
+  {
+    id: "heizler-zalan",
+    name: "HEIZLER ZALÁN",
+    image: heizlerZalanFighter,
+    color: "heizler-zalan",
+    maxHealth: 105,
+    strength: 16,
+    attackSpeed: 1000,
+  },
+  {
+    id: "szabo-agoston",
+    name: "SZABÓ ÁGOSTON",
+    image: szaboAgostonFighter,
+    color: "szabo-agoston",
+    maxHealth: 130,
+    strength: 20,
+    attackSpeed: 1600,
+  },
+  {
+    id: "simai-botond",
+    name: "SIMAI BOTOND",
+    image: simaiBotondFighter,
+    color: "simai-botond",
+    maxHealth: 140,
+    strength: 10,
+    attackSpeed: 1800,
+  },
+  {
+    id: "fortnite",
+    name: "FORTNITE GUY",
+    image: fortniteFighter,
+    color: "fortnite",
+    maxHealth: 90,
+    strength: 13,
+    attackSpeed: 800,
+  },
+  {
+    id: "thanos",
+    name: "THANOS",
+    image: thanosFighter,
+    color: "thanos",
+    maxHealth: 200,
+    strength: 25,
+    attackSpeed: 2000,
+  },
+  {
+    id: "tota-oliver",
+    name: "TÓTA OLIVÉR",
+    image: totaOliverFighter,
+    color: "tota-oliver",
+    maxHealth: 85,
+    strength: 22,
+    attackSpeed: 700,
+  },
+  {
+    id: "jakab-istvan",
+    name: "JAKAB ISTVÁN",
+    image: jakabIstvanFighter,
+    color: "jakab-istvan",
+    maxHealth: 115,
+    strength: 17,
+    attackSpeed: 1300,
   },
 ];
 
@@ -70,7 +159,7 @@ export const CharacterSelect = ({ onStartBattle }: CharacterSelectProps) => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-8">
           {fighters.map((fighter) => {
             const isSelected1 = selectedFighter1?.id === fighter.id;
             const isSelected2 = selectedFighter2?.id === fighter.id;
