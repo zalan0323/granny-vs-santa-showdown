@@ -33,6 +33,10 @@ import barathBarnabasFighter from "@/assets/barath-barnabas-fighter.png";
 import kobanLaciFighter from "@/assets/koban-laci-fighter.png";
 import pinterZsomborFighter from "@/assets/pinter-zsombor-fighter.png";
 import koronczaiFighter from "@/assets/koronczai-fighter.png";
+import bocskayTanaranoFighter from "@/assets/bocskay-tanarano-fighter.png";
+import gyurikPalFighter from "@/assets/gyurik-pal-fighter.png";
+import csehBalazsFighter from "@/assets/cseh-balazs-fighter.png";
+import albrechtLaszloFighter from "@/assets/albrecht-laszlo-fighter.png";
 
 interface CharacterSelectProps {
   onStartBattle: (fighter1: Fighter, fighter2: Fighter) => void;
@@ -82,7 +86,8 @@ export const fighters: Fighter[] = [
     color: "heizler-zalan",
     maxHealth: 105,
     strength: 16,
-    attackSpeed: 750,
+    attackSpeed: 800,
+    specialStats: "+1 speed every 3 seconds",
   },
   {
     id: "szabo-agoston",
@@ -326,6 +331,44 @@ export const fighters: Fighter[] = [
     maxHealth: 110,
     strength: 30,
     attackSpeed: 1500,
+  },
+  {
+    id: "bocskay-tanarano",
+    name: "BOCSKAY TANÁRNŐ",
+    image: bocskayTanaranoFighter,
+    color: "bocskay-tanarano",
+    maxHealth: 60,
+    strength: 55,
+    attackSpeed: 1600,
+  },
+  {
+    id: "gyurik-pal",
+    name: "GYURIK PÁL",
+    image: gyurikPalFighter,
+    color: "gyurik-pal",
+    maxHealth: 110,
+    strength: 18,
+    attackSpeed: 1100,
+    specialStats: "50% damage vs Gréta & Eszter",
+  },
+  {
+    id: "cseh-balazs",
+    name: "CSEH BALÁZS",
+    image: csehBalazsFighter,
+    color: "cseh-balazs",
+    maxHealth: 105,
+    strength: 16,
+    attackSpeed: 1000,
+  },
+  {
+    id: "albrecht-laszlo",
+    name: "ALBRECHT LÁSZLÓ",
+    image: albrechtLaszloFighter,
+    color: "albrecht-laszlo",
+    maxHealth: 150,
+    strength: 22,
+    attackSpeed: 1700,
+    specialStats: "Dementia: +10 HP/10s | Strong vs Ágoston",
   },
 ];
 

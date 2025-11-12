@@ -69,6 +69,10 @@ All colors MUST be HSL.
     --koban-laci: 350 80% 55%;
     --pinter-zsombor: 180 70% 50%;
     --koronczai: 270 65% 55%;
+    --bocskay-tanarano: 15 75% 50%;
+    --gyurik-pal: 200 65% 55%;
+    --cseh-balazs: 190 70% 50%;
+    --albrecht-laszlo: 220 60% 55%;
     --battle-glow: 0 0% 100%;
     
     --gradient-battle: linear-gradient(135deg, hsl(var(--primary) / 0.2), hsl(var(--secondary) / 0.2));

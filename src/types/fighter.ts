@@ -30,7 +30,11 @@ export type FighterType =
   | "barath-barnabas"
   | "koban-laci"
   | "pinter-zsombor"
-  | "koronczai";
+  | "koronczai"
+  | "bocskay-tanarano"
+  | "gyurik-pal"
+  | "cseh-balazs"
+  | "albrecht-laszlo";
 
 export interface Fighter {
   id: FighterType;
@@ -40,4 +44,5 @@ export interface Fighter {
   maxHealth: number;
   strength: number;
   attackSpeed: number;
+  specialStats?: string;
 }
