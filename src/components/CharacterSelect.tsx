@@ -92,9 +92,9 @@ export const fighters: Fighter[] = [
     image: heizlerZalanFighter,
     color: "heizler-zalan",
     maxHealth: 105,
-    strength: 16,
+    strength: 18,
     attackSpeed: 800,
-    specialStats: "+1 speed every 3 seconds",
+    specialStats: "+2 speed every 3 seconds",
   },
   {
     id: "szabo-agoston",

@@ -101,21 +101,61 @@ const BattleArena = ({ fighter1, fighter2, onBackToSelect }: BattleArenaProps) =
     setFighter2CurrentSpeed(fighter2.attackSpeed);
     
     // Special ability timers
-    // Heizler Zalán: +1 speed every 3 seconds
+    // Heizler Zalán: +2 speed every 3 seconds
     if (fighter1.id === 'heizler-zalan') {
       const speedInterval = setInterval(() => {
-        setFighter1CurrentSpeed(prev => Math.max(100, prev - 50)); // Lower attackSpeed = faster
+        setFighter1CurrentSpeed(prev => Math.max(100, prev - 100)); // Lower attackSpeed = faster
       }, 3000);
       setTimeout(() => clearInterval(speedInterval), 300000); // Clear after 5 minutes
     }
     if (fighter2.id === 'heizler-zalan') {
       const speedInterval = setInterval(() => {
-        setFighter2CurrentSpeed(prev => Math.max(100, prev - 50));
+        setFighter2CurrentSpeed(prev => Math.max(100, prev - 100));
       }, 3000);
       setTimeout(() => clearInterval(speedInterval), 300000);
     }
+    /*
+    // custom: adjust attack (strength & speed) based on current health percent
+    if (fighter1.id === 'custom') {
+      const customAdjustInterval = setInterval(() => {
+        const pct = (fighter1Health / fighter1.maxHealth) * 100;
+        if (pct <= 25) {
+          // Rage mode: big damage, much faster
+          setFighter1CurrentStrength(Math.floor(fighter1.strength * 1.5));
+          setFighter1CurrentSpeed(prev => Math.max(100, prev - 200));
+        } else if (pct <= 50) {
+          // Hurt but still dangerous: moderate damage up, slightly faster
+          setFighter1CurrentStrength(Math.floor(fighter1.strength * 1.25));
+          setFighter1CurrentSpeed(prev => Math.max(100, prev - 100));
+        } else {
+          // Normal
+          setFighter1CurrentStrength(fighter1.strength);
+          setFighter1CurrentSpeed(fighter1.attackSpeed);
+        }
+      }, 1000);
+      setTimeout(() => clearInterval(customAdjustInterval), 300000);
+    }
     
-    // Albrecht László: +10 HP every 10 seconds (dementia)
+    if (fighter2.id === 'custom') {
+      const customAdjustInterval = setInterval(() => {
+        const pct = (fighter2Health / fighter2.maxHealth) * 100;
+        if (pct <= 25) {
+          setFighter2CurrentStrength(Math.floor(fighter2.strength * 1.5));
+          setFighter2CurrentSpeed(prev => Math.max(100, prev - 200));
+        } else if (pct <= 50) {
+          setFighter2CurrentStrength(Math.floor(fighter2.strength * 1.25));
+          setFighter2CurrentSpeed(prev => Math.max(100, prev - 100));
+        } else {
+          setFighter2CurrentStrength(fighter2.strength);
+          setFighter2CurrentSpeed(fighter2.attackSpeed);
+        }
+      }, 1000);
+      setTimeout(() => clearInterval(customAdjustInterval), 300000);
+    }
+    */
+    
+
+    // albrecht: +10 HP every 10 seconds
     if (fighter1.id === 'albrecht-laszlo') {
       const dementiaInterval = setInterval(() => {
         setFighter1Health(prev => Math.min(fighter1.maxHealth, prev + 10));
@@ -128,6 +168,48 @@ const BattleArena = ({ fighter1, fighter2, onBackToSelect }: BattleArenaProps) =
       }, 10000);
       setTimeout(() => clearInterval(dementiaInterval), 300000);
     }
+
+
+    // custome: +1 HP every 1 seconds
+    if (fighter1.id === 'custom') {
+      const dementiaInterval = setInterval(() => {
+        setFighter1Health(prev => Math.min(fighter1.maxHealth, prev + 1));
+      }, 1000);
+      setTimeout(() => clearInterval(dementiaInterval), 300000);
+    }
+    if (fighter2.id === 'custom') {
+      const dementiaInterval = setInterval(() => {
+        setFighter2Health(prev => Math.min(fighter2.maxHealth, prev + 1));
+      }, 1000);
+      setTimeout(() => clearInterval(dementiaInterval), 300000);
+    }
+
+    // fortnite: -10 HP every 10 seconds
+    if (fighter1.id === 'fortnite') {
+      const dementiaInterval = setInterval(() => {
+        setFighter2Health(prev => Math.min(fighter2.maxHealth, prev - 10));
+      }, 10000);
+      setTimeout(() => clearInterval(dementiaInterval), 300000);
+    }
+    if (fighter2.id === 'fortnite') {
+      const dementiaInterval = setInterval(() => {
+        setFighter1Health(prev => Math.min(fighter1.maxHealth, prev - 10));
+      }, 10000);
+      setTimeout(() => clearInterval(dementiaInterval), 300000);
+    }
+
+    // Teki's special ability: +10 damage and -200 speed if health is below 50%
+    if (fighter1.id === 'teki-teknos' && fighter1Health < fighter1.maxHealth / 2) {
+      setFighter1CurrentStrength(prev => prev + 10);
+      setFighter1CurrentSpeed(prev => Math.max(100, prev - 200));
+    }
+    if (fighter2.id === 'teki-teknos' && fighter2Health < fighter2.maxHealth / 2) {
+      setFighter2CurrentStrength(prev => prev + 10);
+      setFighter2CurrentSpeed(prev => Math.max(100, prev - 200));
+    }
+
+
+
 
     // Simulate battle with random attacks
     const battleInterval = setInterval(() => {
