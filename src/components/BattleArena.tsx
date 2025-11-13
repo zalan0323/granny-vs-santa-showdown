@@ -171,13 +171,13 @@ const BattleArena = ({ fighter1, fighter2, onBackToSelect }: BattleArenaProps) =
 
 
     // custome: +1 HP every 1 seconds
-    if (fighter1.id === 'custom') {
+    if (fighter1.id === 'kovacs-david') {
       const dementiaInterval = setInterval(() => {
         setFighter1Health(prev => Math.min(fighter1.maxHealth, prev + 1));
       }, 1000);
       setTimeout(() => clearInterval(dementiaInterval), 300000);
     }
-    if (fighter2.id === 'custom') {
+    if (fighter2.id === 'kovacs-david') {
       const dementiaInterval = setInterval(() => {
         setFighter2Health(prev => Math.min(fighter2.maxHealth, prev + 1));
       }, 1000);
